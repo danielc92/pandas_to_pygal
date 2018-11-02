@@ -1,10 +1,6 @@
 import pygal
-from pygal import style
-import pandas
-import datetime
 
-colour_dict = {"BlueStyle": style.BlueStyle,
-               "DefaultStyle": pygal.style.DefaultStyle,
+colour_dict = {"DefaultStyle": pygal.style.DefaultStyle,
                "DarkStyle": pygal.style.DarkStyle,
                "NeonStyle": pygal.style.NeonStyle,
                "DarkSolarizedStyle": pygal.style.DarkSolarizedStyle,
@@ -31,7 +27,7 @@ def return_aggregate_series(series_object, agg_type):
     agg_type = agg_type.lower().strip()
 
     if agg_type != "sum" and agg_type != "count" and agg_type != "countd":
-        print("Incorrect aggregate type chosen, aggregate type has been set to sum.")
+        print("Invalid agg type, agg type has been set to sum.")
         agg_type = "sum"
 
     if agg_type == "sum":
@@ -46,7 +42,7 @@ def return_aggregate_series(series_object, agg_type):
 
 # CORE FUNCTIONS
 
-def pandas_to_pygal_Bar(
+def pandas_to_pygal_bar(
         data,
         groupby1,
         aggregate,
@@ -64,7 +60,7 @@ def pandas_to_pygal_Bar(
     '''
     Create pygal object
     '''
-    if horizontal == True:
+    if horizontal is True:
         pyg = pygal.HorizontalBar()
     else:
         pyg = pygal.Bar()
@@ -111,7 +107,7 @@ def pandas_to_pygal_Bar(
     return pyg
 
 
-def pandas_to_pygal_Line(
+def pandas_to_pygal_line(
         data,
         groupby1,
         aggregate,
@@ -168,7 +164,7 @@ def pandas_to_pygal_Line(
     return pyg
 
 
-def pandas_to_pygal_Radar(
+def pandas_to_pygal_radar(
         data,
         groupby1,
         groupby2,
@@ -215,7 +211,7 @@ def pandas_to_pygal_Radar(
             else:
                 dict[name].append(None)
 
-    if absolute_values == False:
+    if absolute_values is False:
         totals = []
 
         dict_values_lists = list(dict.values())
@@ -240,13 +236,13 @@ def pandas_to_pygal_Radar(
                 numerator = dict[key][index]
                 denominator = totals[index]
                 if numerator is not None and denominator is not None:
-                    percentage_dict[key].append(numerator/denominator * 100)
+                    percentage_dict[key].append(numerator / denominator * 100)
                 else:
                     percentage_dict[key].append(None)
     '''
     Add data to pygal object
     '''
-    if absolute_values == True:
+    if absolute_values is True:
         for key in dict.keys():
             pyg.add(key, dict[key])
     else:
@@ -272,7 +268,7 @@ def pandas_to_pygal_Radar(
     return pyg
 
 
-def pandas_to_pygal_Dot(
+def pandas_to_pygal_dot(
         data,
         groupby1,
         groupby2,
@@ -319,7 +315,7 @@ def pandas_to_pygal_Dot(
             else:
                 dict[name].append(None)
 
-    if absolute_values == False:
+    if absolute_values is False:
         totals = []
 
         dict_values_lists = list(dict.values())
@@ -344,13 +340,13 @@ def pandas_to_pygal_Dot(
                 numerator = dict[key][index]
                 denominator = totals[index]
                 if numerator is not None and denominator is not None:
-                    percentage_dict[key].append(numerator/denominator * 100)
+                    percentage_dict[key].append(numerator / denominator * 100)
                 else:
                     percentage_dict[key].append(None)
     '''
     Add data to pygal object
     '''
-    if absolute_values == True:
+    if absolute_values is True:
         for key in dict.keys():
             pyg.add(key, dict[key])
     else:
@@ -377,7 +373,7 @@ def pandas_to_pygal_Dot(
     return pyg
 
 
-def pandas_to_pygal_StackedMultiBar(
+def pandas_to_pygal_stackedmultibar(
         data,
         groupby1,
         groupby2,
@@ -400,13 +396,13 @@ def pandas_to_pygal_StackedMultiBar(
     Create pygal object
     '''
 
-    if horizontal == True and stacked == True:
+    if horizontal is True and stacked is True:
         pyg = pygal.HorizontalStackedBar()
 
-    elif horizontal == True and stacked == False:
+    elif horizontal is True and stacked is False:
         pyg = pygal.HorizontalBar()
 
-    elif horizontal == False and stacked == True:
+    elif horizontal is False and stacked is True:
         pyg = pygal.StackedBar()
 
     else:
@@ -437,7 +433,7 @@ def pandas_to_pygal_StackedMultiBar(
             else:
                 dict[name].append(None)
 
-    if absolute_values == False:
+    if absolute_values is False:
         totals = []
 
         dict_values_lists = list(dict.values())
@@ -462,13 +458,13 @@ def pandas_to_pygal_StackedMultiBar(
                 numerator = dict[key][index]
                 denominator = totals[index]
                 if numerator is not None and denominator is not None:
-                    percentage_dict[key].append(numerator/denominator * 100)
+                    percentage_dict[key].append(numerator / denominator * 100)
                 else:
                     percentage_dict[key].append(None)
     '''
     Add data to pygal object
     '''
-    if absolute_values == True:
+    if absolute_values is True:
         for key in dict.keys():
             pyg.add(key, dict[key])
     else:
@@ -496,7 +492,7 @@ def pandas_to_pygal_StackedMultiBar(
     return pyg
 
 
-def pandas_to_pygal_Pie(data,
+def pandas_to_pygal_pie(data,
                         groupby1,
                         aggregate,
                         colourstyle=colour_dict["DarkGreenStyle"],
@@ -533,10 +529,10 @@ def pandas_to_pygal_Pie(data,
         aggregate_value = return_aggregate_series(
             subset_data[aggregate], agg_type)
 
-        if absolute_values == True:
+        if absolute_values is True:
             dict[name].append(aggregate_value)
         else:
-            dict[name].append(aggregate_value/total*100)
+            dict[name].append(aggregate_value / total * 100)
 
     '''
     Add values to pygal object
@@ -569,7 +565,7 @@ def pandas_to_pygal_Pie(data,
     return pyg
 
 
-def pandas_to_pygal_Gauge(data,
+def pandas_to_pygal_gauge(data,
                           groupby1,
                           aggregate,
                           target_value=100,
@@ -608,7 +604,7 @@ def pandas_to_pygal_Gauge(data,
         aggregate_value = return_aggregate_series(subset_data[aggregate],
                                                   agg_type)
 
-        if absolute_values == True:
+        if absolute_values is True:
             dict[name] = aggregate_value
         else:
             dict[name] = aggregate_value / total * 100
@@ -647,7 +643,7 @@ def pandas_to_pygal_Gauge(data,
     return pyg
 
 
-def pandas_to_pygal_StackedMultiLine(data,
+def pandas_to_pygal_stackedmultiline(data,
                                      groupby1,
                                      groupby2,
                                      aggregate,
@@ -669,11 +665,11 @@ def pandas_to_pygal_StackedMultiLine(data,
     Create pygal object
     '''
 
-    if stacked == True and horizontal == True:
+    if stacked is True and horizontal is True:
         pyg = pygal.HorizontalStackedLine()
-    elif horizontal == True and stacked == False:
+    elif horizontal is True and stacked is False:
         pyg = pygal.HorizontalLine()
-    elif horizontal == False and stacked == True:
+    elif horizontal is False and stacked is True:
         pyg = pygal.StackedLine()
     else:
         pyg = pygal.Line()
@@ -691,8 +687,7 @@ def pandas_to_pygal_StackedMultiLine(data,
 
     for name in groupby2_distinct:
         for name2 in groupby1_distinct:
-            subset_data = data[(data[groupby1] == name2)
-                               & (data[groupby2] == name)]
+            subset_data = data[(data[groupby1] == name2) & (data[groupby2] == name)]
             rows_in_subset_data = subset_data.shape[0]
             aggregate_value = return_aggregate_series(subset_data[aggregate],
                                                       agg_type)
@@ -702,7 +697,7 @@ def pandas_to_pygal_StackedMultiLine(data,
             else:
                 dict[name].append(None)
 
-    if absolute_values == False:
+    if absolute_values is False:
         totals = []
 
         dict_values_lists = list(dict.values())
@@ -732,7 +727,7 @@ def pandas_to_pygal_StackedMultiLine(data,
     '''
     Add data to pygal object
     '''
-    if absolute_values == True:
+    if absolute_values is True:
         for key in dict.keys():
             pyg.add(key, dict[key])
     else:
@@ -742,7 +737,7 @@ def pandas_to_pygal_StackedMultiLine(data,
     '''
     Chart configuration options
     '''
-    if cubic == True:
+    if cubic is True:
         pyg.config.interpolate = "cubic"
 
     pyg.config.legend_at_bottom = legend_at_bottom
@@ -762,7 +757,7 @@ def pandas_to_pygal_StackedMultiLine(data,
     return pyg
 
 
-def pygal_to_pandas_Scatter(data,
+def pygal_to_pandas_scatter(data,
                             x_col_name,
                             y_col_name,
                             groupby1,
@@ -775,7 +770,8 @@ def pygal_to_pandas_Scatter(data,
                             legend_at_bottom=False,
                             stroke=False,
                             legend_at_bottom_columns=3,
-                            dots_size=1):
+                            dots_size=1
+                            ):
     '''
     Create pygal object
     '''
@@ -784,7 +780,7 @@ def pygal_to_pandas_Scatter(data,
     '''
     Transformn and add data to pygal object
     '''
-    if split == False:
+    if split is False:
 
         subset = data[[x_col_name, y_col_name]]
         points_list = []
