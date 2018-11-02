@@ -1,4 +1,5 @@
 import pygal
+import numpy
 
 '''
 Helper functions:
@@ -12,6 +13,7 @@ To transmute pandas dataframes into dictionary formats for pygal
 
 def return_data_tier1(data, group_primary, aggregate_by, aggregate_type):
 
+    # Aggregate the data conditionally, index set to 'group_primary'
     if aggregate_type == 'mean':
         data_new = data.groupby(group_primary).mean()
     elif aggregate_type == 'min':
@@ -21,6 +23,7 @@ def return_data_tier1(data, group_primary, aggregate_by, aggregate_type):
     else:
         data_new = data.groupby(group_primary).sum()
 
+    # Convert into python dictionary and select subset by 'aggregate_by'
     dictionary = data_new.to_dict()[aggregate_by]
 
     return dictionary
@@ -28,9 +31,21 @@ def return_data_tier1(data, group_primary, aggregate_by, aggregate_type):
 
 def return_data_tier2(data, group_primary, group_secondary, aggregate_by, aggregate_type):
 
+    # Determine aggregation method
+    if aggregate_type == 'mean':
+        func = numpy.mean
+    elif aggregate_type == 'min':
+        func = numpy.min
+    elif aggregate_type == 'max':
+        func = numpy.max
+    else:
+        func = numpy.sum
+
+    # Create a pivot table by the two group variables
     pivotted = data.pivot_table(values=aggregate_by,
-                                 index=group_primary,
-                                 columns=group_secondary)
+        index=group_primary,
+        columns=group_secondary,
+        aggfunc=func)
 
     labels = list(pivotted.index)
     dictionary_data = pivotted.to_dict(orient='list')
@@ -228,7 +243,7 @@ def pandpyg_stackedline(
         aggregate_type,
         custom_config=None,
         custom_style=None):
-    
+
     # Create pygal chart object
     chart = pygal.StackedLine()
 
@@ -244,7 +259,7 @@ def pandpyg_stackedline(
     chart.x_labels = dictionary['labels']
 
     # Return chart object
-    return 
+    return
 
 
 def pandpyg_radar(
@@ -255,7 +270,7 @@ def pandpyg_radar(
         aggregate_type,
         custom_config=None,
         custom_style=None):
-    
+
     # Create pygal chart object
     chart = pygal.Radar()
 
@@ -272,4 +287,3 @@ def pandpyg_radar(
 
     # Return chart object
     return chart
-
