@@ -1,18 +1,15 @@
+"""Import pygal for charting and numpy for aggregate functions."""
 import pygal
 import numpy
 
-'''
-Helper functions:
-These functions will turn the pandas dataframe into a format suitable
-for either 1 tier or 2 tier pygal charts.
-1 tier - only one group by required (eg. pie chart)
-2 tier - two group by required (eg. stacked bar chart)
-To transmute pandas dataframes into dictionary formats for pygal
-'''
+# HELPER FUNCTIONS
 
 
-def return_data_tier1(data, group_primary, aggregate_by, aggregate_type):
-
+def return_data_tier1(data,
+                      group_primary,
+                      aggregate_by,
+                      aggregate_type):
+    """Return a dictionary for a one-tier chart."""
     # Aggregate the data conditionally, index set to 'group_primary'
     if aggregate_type == 'mean':
         data_new = data.groupby(group_primary).mean()
@@ -29,8 +26,12 @@ def return_data_tier1(data, group_primary, aggregate_by, aggregate_type):
     return dictionary
 
 
-def return_data_tier2(data, group_primary, group_secondary, aggregate_by, aggregate_type):
-
+def return_data_tier2(data,
+                      group_primary,
+                      group_secondary,
+                      aggregate_by,
+                      aggregate_type):
+    """Return a dictionary for a two-tier chart."""
     # Determine aggregation method
     if aggregate_type == 'mean':
         func = numpy.mean
@@ -43,9 +44,9 @@ def return_data_tier2(data, group_primary, group_secondary, aggregate_by, aggreg
 
     # Create a pivot table by the two group variables
     pivotted = data.pivot_table(values=aggregate_by,
-        index=group_primary,
-        columns=group_secondary,
-        aggfunc=func)
+                                index=group_primary,
+                                columns=group_secondary,
+                                aggfunc=func)
 
     labels = list(pivotted.index)
     dictionary_data = pivotted.to_dict(orient='list')
@@ -53,22 +54,25 @@ def return_data_tier2(data, group_primary, group_secondary, aggregate_by, aggreg
 
     return dictionary
 
-
-'''
-Chart Functions
-'''
+# CHARTING FUNCTIONS
 
 
-def pandpyg_bar(
-        data,
+def bar(data,
         group_primary,
         aggregate_by,
         aggregate_type,
         custom_config=None,
         custom_style=None):
-
+    """Return a pygal Bar chart from a pandas dataframe."""
     pyg = pygal.Bar()
 
+    # Set custom style and config if exists
+    if custom_config:
+        pyg.config = custom_config
+
+    if custom_style:
+        pyg.style = custom_style
+
     # Transform dataframe into dictionary
     dictionary = return_data_tier1(data,
                                    group_primary,
@@ -82,16 +86,22 @@ def pandpyg_bar(
     return pyg
 
 
-def pandpyg_pie(
-        data,
+def pie(data,
         group_primary,
         aggregate_by,
         aggregate_type,
         custom_config=None,
         custom_style=None):
-
+    """Return a pygal Pie chart from a pandas dataframe."""
     pyg = pygal.Pie()
 
+    # Set custom style and config if exists
+    if custom_config:
+        pyg.config = custom_config
+
+    if custom_style:
+        pyg.style = custom_style
+
     # Transform dataframe into dictionary
     dictionary = return_data_tier1(data,
                                    group_primary,
@@ -105,16 +115,22 @@ def pandpyg_pie(
     return pyg
 
 
-def pandpyg_solidgauge(
-        data,
-        group_primary,
-        aggregate_by,
-        aggregate_type,
-        custom_config=None,
-        custom_style=None):
-
+def solidgauge(data,
+               group_primary,
+               aggregate_by,
+               aggregate_type,
+               custom_config=None,
+               custom_style=None):
+    """Return a pygal Solid Gauge chart from a pandas dataframe."""
     pyg = pygal.SolidGauge()
 
+    # Set custom style and config if exists
+    if custom_config:
+        pyg.config = custom_config
+
+    if custom_style:
+        pyg.style = custom_style
+
     # Transform dataframe into dictionary
     dictionary = return_data_tier1(data,
                                    group_primary,
@@ -128,18 +144,23 @@ def pandpyg_solidgauge(
     return pyg
 
 
-def pandpyg_line(
-        data,
-        group_primary,
-        group_secondary,
-        aggregate_by,
-        aggregate_type,
-        custom_config=None,
-        custom_style=None):
-    
-    # Create pygal chart object
+def line(data,
+         group_primary,
+         group_secondary,
+         aggregate_by,
+         aggregate_type,
+         custom_config=None,
+         custom_style=None):
+    """Return a pygal Line chart from a pandas dataframe."""
     chart = pygal.Line()
 
+    # Set custom style and config if exists
+    if custom_config:
+        chart.config = custom_config
+
+    if custom_style:
+        chart.style = custom_style
+
     # Transform dataframe into dictionary using helper function
     dictionary = return_data_tier2(data,
                                    group_primary,
@@ -155,18 +176,23 @@ def pandpyg_line(
     return chart
 
 
-def pandpyg_groupedbar(
-        data,
-        group_primary,
-        group_secondary,
-        aggregate_by,
-        aggregate_type,
-        custom_config=None,
-        custom_style=None):
-    
-    # Create pygal chart object
+def groupedbar(data,
+               group_primary,
+               group_secondary,
+               aggregate_by,
+               aggregate_type,
+               custom_config=None,
+               custom_style=None):
+    """Return a pygal Grouped Bar chart from a pandas dataframe."""
     chart = pygal.Bar()
 
+    # Set custom style and config if exists
+    if custom_config:
+        chart.config = custom_config
+
+    if custom_style:
+        chart.style = custom_style
+
     # Transform dataframe into dictionary using helper function
     dictionary = return_data_tier2(data,
                                    group_primary,
@@ -182,18 +208,23 @@ def pandpyg_groupedbar(
     return chart
 
 
-def pandpyg_dot(
-        data,
+def dot(data,
         group_primary,
         group_secondary,
         aggregate_by,
         aggregate_type,
         custom_config=None,
         custom_style=None):
-    
-    # Create pygal chart object
+    """Return a pygal Dot chart from a pandas dataframe."""
     chart = pygal.Dot()
 
+    # Set custom style and config if exists
+    if custom_config:
+        chart.config = custom_config
+
+    if custom_style:
+        chart.style = custom_style
+
     # Transform dataframe into dictionary using helper function
     dictionary = return_data_tier2(data,
                                    group_primary,
@@ -208,18 +239,24 @@ def pandpyg_dot(
     # Return chart object
     return chart
 
-def pandpyg_stackedbar(
-        data,
-        group_primary,
-        group_secondary,
-        aggregate_by,
-        aggregate_type,
-        custom_config=None,
-        custom_style=None):
-    
-    # Create pygal chart object
+
+def stackedbar(data,
+               group_primary,
+               group_secondary,
+               aggregate_by,
+               aggregate_type,
+               custom_config=None,
+               custom_style=None):
+    """Return a pygal Stacked Bar chart from a pandas dataframe."""
     chart = pygal.StackedBar()
 
+    # Set custom style and config if exists
+    if custom_config:
+        chart.config = custom_config
+
+    if custom_style:
+        chart.style = custom_style
+
     # Transform dataframe into dictionary using helper function
     dictionary = return_data_tier2(data,
                                    group_primary,
@@ -235,17 +272,22 @@ def pandpyg_stackedbar(
     return chart
 
 
-def pandpyg_stackedline(
-        data,
-        group_primary,
-        group_secondary,
-        aggregate_by,
-        aggregate_type,
-        custom_config=None,
-        custom_style=None):
-
-    # Create pygal chart object
+def stackedline(data,
+                group_primary,
+                group_secondary,
+                aggregate_by,
+                aggregate_type,
+                custom_config=None,
+                custom_style=None):
+    """Return a pygal Stacked Line chart from a pandas dataframe."""
     chart = pygal.StackedLine()
+
+    # Set custom style and config if exists
+    if custom_config:
+        chart.config = custom_config
+
+    if custom_style:
+        chart.style = custom_style
 
     # Transform dataframe into dictionary using helper function
     dictionary = return_data_tier2(data,
@@ -262,17 +304,22 @@ def pandpyg_stackedline(
     return
 
 
-def pandpyg_radar(
-        data,
-        group_primary,
-        group_secondary,
-        aggregate_by,
-        aggregate_type,
-        custom_config=None,
-        custom_style=None):
-
-    # Create pygal chart object
+def radar(data,
+          group_primary,
+          group_secondary,
+          aggregate_by,
+          aggregate_type,
+          custom_config=None,
+          custom_style=None):
+    """Return a pygal Radar chart from a pandas dataframe."""
     chart = pygal.Radar()
+
+    # Set custom style and config if exists
+    if custom_config:
+        chart.config = custom_config
+
+    if custom_style:
+        chart.style = custom_style
 
     # Transform dataframe into dictionary using helper function
     dictionary = return_data_tier2(data,
