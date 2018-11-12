@@ -334,3 +334,32 @@ def radar(data,
 
     # Return chart object
     return chart
+
+
+def scatter(data,
+            x_values,
+            y_values,
+            group_primary,
+            custom_config=None,
+            custom_style=None):
+    """Return a pygal Scatter chart from a pandas dataframe."""
+    chart = pygal.XY()
+
+    # Set custom style and config if exists
+    if custom_config:
+        chart.config = custom_config
+
+    if custom_style:
+        chart.style = custom_style
+
+    # Transform dataframe into dictionary using helper function
+    dictionary = {key: list(zip(
+                  data[data[group_primary] == key][x_values],
+                  data[data[group_primary] == key][y_values]))
+                  for key in data[group_primary].unique()}
+
+    # Add data to pygal object
+    [chart.add(key, values) for key, values in dictionary.items()]
+
+    # Return chart object
+    return chart
